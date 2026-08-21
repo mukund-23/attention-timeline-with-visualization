@@ -18,7 +18,7 @@ export default function App() {
   const counts = Object.fromEntries(
     THREADS.map(t => [t.id, entries.filter(e => e.threads.includes(t.id)).length]))
   const shown = mode === 'short' ? entries.filter(e => SHORT.includes(e.id)) : entries
-  const pending = entries.filter(e => e.dateUnverified).length
+  const pendingAdopted = entries.filter(e => e.adoptedUnverified).length
 
   return (
     <>
@@ -141,7 +141,9 @@ export default function App() {
             Dates are arXiv v1 submission dates unless noted. Fallbacks, in order: a dated public post
             where no paper exists, then artifact release date. A second date appears only where a
             mechanism took twelve months or more to reach a named release. Full source table in the
-            repository README. {pending} dates are pending primary verification and marked as such.
+            repository README. All {entries.length} first-appearance dates have been verified against the
+            primary source. {pendingAdopted} adoption markers are model-release dates still pending
+            confirmation and are labelled as such inline.
           </p>
         </div>
       </footer>

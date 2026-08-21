@@ -6,6 +6,7 @@
   "date": "2017-05-08",
   "adopted": null,
   "dateUnverified": false,
+  "adoptedUnverified": false,
   "tier": 2,
   "viz": "position",
   "threads": [
@@ -38,6 +39,7 @@
   "date": "2017-06-12",
   "adopted": null,
   "dateUnverified": false,
+  "adoptedUnverified": false,
   "tier": 1,
   "viz": "heatmap + KV",
   "threads": [
@@ -72,6 +74,7 @@
   "date": "2017-06-12",
   "adopted": null,
   "dateUnverified": false,
+  "adoptedUnverified": false,
   "tier": 1,
   "viz": "position",
   "threads": [
@@ -105,6 +108,7 @@
   "date": "2018-03-06",
   "adopted": null,
   "dateUnverified": false,
+  "adoptedUnverified": false,
   "tier": 1,
   "viz": "position + heatmap",
   "threads": [
@@ -137,6 +141,7 @@
   "date": "2019-01-09",
   "adopted": null,
   "dateUnverified": false,
+  "adoptedUnverified": false,
   "tier": 2,
   "viz": "recurrent state",
   "threads": [
@@ -169,7 +174,8 @@
   "name": "Sparse Transformer",
   "date": "2019-04-23",
   "adopted": null,
-  "dateUnverified": true,
+  "dateUnverified": false,
+  "adoptedUnverified": false,
   "tier": 1,
   "viz": "heatmap",
   "threads": [
@@ -202,6 +208,7 @@
   "date": "2019-11-06",
   "adopted": null,
   "dateUnverified": false,
+  "adoptedUnverified": false,
   "tier": 1,
   "viz": "KV memory",
   "threads": [
@@ -235,7 +242,8 @@
   "name": "Longformer / Sliding-Window Attention",
   "date": "2020-04-10",
   "adopted": "2023-09-27",
-  "dateUnverified": true,
+  "dateUnverified": false,
+  "adoptedUnverified": true,
   "tier": 1,
   "viz": "heatmap",
   "threads": [
@@ -269,7 +277,8 @@
   "name": "Linear Attention",
   "date": "2020-06-29",
   "adopted": null,
-  "dateUnverified": true,
+  "dateUnverified": false,
+  "adoptedUnverified": false,
   "tier": 1,
   "viz": "recurrent state",
   "threads": [
@@ -304,7 +313,8 @@
   "name": "BigBird",
   "date": "2020-07-28",
   "adopted": null,
-  "dateUnverified": true,
+  "dateUnverified": false,
+  "adoptedUnverified": false,
   "tier": 2,
   "viz": "heatmap",
   "threads": [
@@ -336,7 +346,8 @@
   "name": "Performer / FAVOR+",
   "date": "2020-09-30",
   "adopted": null,
-  "dateUnverified": true,
+  "dateUnverified": false,
+  "adoptedUnverified": false,
   "tier": 2,
   "viz": "recurrent state",
   "threads": [
@@ -370,6 +381,7 @@
   "date": "2021-02-22",
   "adopted": null,
   "dateUnverified": false,
+  "adoptedUnverified": false,
   "tier": 1,
   "viz": "recurrent state",
   "threads": [
@@ -403,7 +415,8 @@
   "name": "Rotary Position Embeddings",
   "date": "2021-04-20",
   "adopted": "2023-02",
-  "dateUnverified": true,
+  "dateUnverified": false,
+  "adoptedUnverified": true,
   "tier": 1,
   "viz": "position",
   "threads": [
@@ -419,7 +432,7 @@
    "Relative positioning with zero additional attention-time cost.",
    "No parameters.",
    "Position never contaminates the value vectors, only the query\u2013key interaction.",
-   "Attention decays gently with distance as an emergent property, not an imposed one.",
+   "The query\u2013key interaction depends on relative distance, producing distance-dependent behaviour without adding an explicit positional bias term.",
    "Compatible with linear attention, which additive relative biases are not.",
    "Defined at every position."
   ],
@@ -441,6 +454,7 @@
   "date": "2021-06-13",
   "adopted": null,
   "dateUnverified": false,
+  "adoptedUnverified": false,
   "tier": 1,
   "viz": "heatmap",
   "threads": [
@@ -453,7 +467,7 @@
   "mechanism": "Compute the scores, keep only the k largest per query, zero the rest, renormalise. Because softmax weights decay fast, the top k captures nearly all the attention mass. The paper's contribution is doing this memory-efficiently \u2014 scores are computed in chunks and only the top k retained, so the full N\u00d7N matrix never materialises.",
   "buys": [
    "Content-dependent sparsity: the model attends to what matters rather than what is nearby.",
-   "Provably close to full attention when the distribution is peaked, which it usually is.",
+   "Can closely approximate full attention where the attention distribution is strongly peaked, as observed in the paper's evaluated settings.",
    "Memory savings without retraining.",
    "A clean knob \u2014 k \u2014 trading quality against cost."
   ],
@@ -475,6 +489,7 @@
   "date": "2021-08-27",
   "adopted": null,
   "dateUnverified": false,
+  "adoptedUnverified": false,
   "tier": 1,
   "viz": "position + heatmap",
   "threads": [
@@ -487,7 +502,7 @@
   "problem": "Press et al. asked the question the Transformer paper had waved at and never answered: can a model trained on length L work at length 2L? They tested the existing options and found that none of them extrapolated \u2014 sinusoidal, learned, and rotary all degraded. Their diagnosis was that the problem is the positional *embedding* itself.",
   "mechanism": "Delete positional embeddings entirely. Instead subtract a penalty from each attention score proportional to the distance between query and key: `score \u2212 m\u00b7|i\u2212j|`, where m is a fixed per-head slope from a geometric sequence. Different heads get different slopes, so some are sharply local and others nearly global. Nothing is learned.",
   "buys": [
-   "Extrapolates genuinely \u2014 train at 1024, run at 2048 or beyond with perplexity holding.",
+   "Substantially better length extrapolation than the schemes compared in the paper: models trained at 1024 tokens are evaluated at longer lengths without the sharp degradation those alternatives show.",
    "Zero parameters.",
    "Trains 11% faster and uses 11% less memory than sinusoidal.",
    "Trivial to implement.",
@@ -501,7 +516,7 @@
    "And it is incompatible with the KV-compression tricks that RoPE-based models use."
   ],
   "pickWhen": "Length extrapolation with no fine-tuning is the priority; streaming; perplexity-shaped workloads.",
-  "avoidWhen": "Long-range retrieval accuracy matters. Most frontier models chose RoPE plus a scaling method (21\u201323) over ALiBi, and that is the informative fact.",
+  "avoidWhen": "Long-range retrieval accuracy matters. RoPE plus a scaling method became the more common choice in large decoder-only models. ALiBi remains preferable where extrapolation without any interpolation step is the priority.",
   "lineage": "From T5's relative position bias, which added a *learned* bias to scores \u2014 ALiBi's move is to stop learning it. From (relative positions). Conceptual sibling of NoPE and DroPE: all three argue that explicit position embeddings are the problem."
  },
  {
@@ -511,6 +526,7 @@
   "date": "2022-05-27",
   "adopted": null,
   "dateUnverified": false,
+  "adoptedUnverified": false,
   "tier": 1,
   "viz": "IO diagram (bespoke)",
   "threads": [
@@ -545,7 +561,8 @@
   "name": "Grouped-Query Attention",
   "date": "2023-05-22",
   "adopted": "2023-07-18",
-  "dateUnverified": true,
+  "dateUnverified": false,
+  "adoptedUnverified": true,
   "tier": 1,
   "viz": "KV memory",
   "threads": [
@@ -579,7 +596,8 @@
   "name": "NoPE (No Positional Encoding)",
   "date": "2023-05-31",
   "adopted": null,
-  "dateUnverified": true,
+  "dateUnverified": false,
+  "adoptedUnverified": false,
   "tier": 2,
   "viz": "position",
   "threads": [
@@ -614,6 +632,7 @@
   "date": "2023-06-27",
   "adopted": null,
   "dateUnverified": false,
+  "adoptedUnverified": false,
   "tier": 1,
   "viz": "position (shared frequency-stretch viz)",
   "threads": [
@@ -650,6 +669,7 @@
   "date": "2023-06-29",
   "adopted": null,
   "dateUnverified": false,
+  "adoptedUnverified": false,
   "tier": 1,
   "viz": "position (shared)",
   "threads": [
@@ -684,7 +704,8 @@
   "name": "YaRN",
   "date": "2023-08-31",
   "adopted": null,
-  "dateUnverified": true,
+  "dateUnverified": false,
+  "adoptedUnverified": false,
   "tier": 1,
   "viz": "position (shared)",
   "threads": [
@@ -721,6 +742,7 @@
   "date": "2023-09-29",
   "adopted": null,
   "dateUnverified": false,
+  "adoptedUnverified": false,
   "tier": 1,
   "viz": "heatmap",
   "threads": [
@@ -758,6 +780,7 @@
   "date": "2024-05-07",
   "adopted": null,
   "dateUnverified": false,
+  "adoptedUnverified": false,
   "tier": 1,
   "viz": "KV memory",
   "threads": [
@@ -790,7 +813,8 @@
   "name": "DeltaNet (parallelized)",
   "date": "2024-06-10",
   "adopted": null,
-  "dateUnverified": true,
+  "dateUnverified": false,
+  "adoptedUnverified": false,
   "tier": 2,
   "viz": "recurrent state",
   "threads": [
@@ -824,7 +848,8 @@
   "name": "Gated DeltaNet",
   "date": "2024-12-09",
   "adopted": "2025-09",
-  "dateUnverified": true,
+  "dateUnverified": false,
+  "adoptedUnverified": true,
   "tier": 1,
   "viz": "recurrent state",
   "threads": [
@@ -860,6 +885,7 @@
   "date": "2025-02-16",
   "adopted": null,
   "dateUnverified": false,
+  "adoptedUnverified": false,
   "tier": 1,
   "viz": "heatmap",
   "threads": [
@@ -895,6 +921,7 @@
   "date": "2025-09-29",
   "adopted": null,
   "dateUnverified": false,
+  "adoptedUnverified": false,
   "tier": 1,
   "viz": "heatmap + KV",
   "threads": [
@@ -931,6 +958,7 @@
   "date": "2025-10-30",
   "adopted": null,
   "dateUnverified": false,
+  "adoptedUnverified": false,
   "tier": 2,
   "viz": "recurrent state",
   "threads": [
@@ -966,6 +994,7 @@
   "date": "2025-12-13",
   "adopted": null,
   "dateUnverified": false,
+  "adoptedUnverified": false,
   "tier": 1,
   "viz": "position",
   "threads": [

@@ -143,7 +143,7 @@ Same content, condensed. Toggle at the top of the page switches between short pa
 ---
 
 ## 6 — Sparse Transformer
-`2019-04-23` ○ · Tier 1 · heatmap · threads: sparsity
+`2019-04-23` · Tier 1 · heatmap · threads: sparsity
 
 **Problem.** The first serious attempt to state the quadratic problem as a problem. Generating images and audio autoregressively means sequences of tens of thousands of steps, and N² attention over 12,288 pixels is simply not payable. OpenAI needed long sequences for a generative model and there was no way to get them.
 
@@ -183,7 +183,7 @@ Same content, condensed. Toggle at the top of the page switches between short pa
 ---
 
 ## 8 — Longformer / Sliding-Window Attention
-`2020-04-10` ○ · adopted `2023-09-27` ○ · Tier 1 · heatmap · threads: sparsity, context
+`2020-04-10` · adopted `2023-09-27` ○ · Tier 1 · heatmap · threads: sparsity, context
 
 > Appeared 2020-04-10. Became standard 2023-09-27 with Mistral 7B. Three years and five months — the widest gap on the timeline.
 
@@ -212,7 +212,7 @@ Same content, condensed. Toggle at the top of the page switches between short pa
 ---
 
 ## 9 — Linear Attention
-`2020-06-29` ○ · Tier 1 · recurrent state · threads: recurrent
+`2020-06-29` · Tier 1 · recurrent state · threads: recurrent
 
 **Problem.** Everyone else was attacking the N² matrix by computing fewer of its entries. Katharopoulos et al. asked whether it needed to be computed at all.
 
@@ -231,7 +231,7 @@ Same content, condensed. Toggle at the top of the page switches between short pa
 ---
 
 ## 10 — BigBird
-`2020-07-28` ○ · Tier 2 · heatmap · threads: sparsity
+`2020-07-28` · Tier 2 · heatmap · threads: sparsity
 
 **Problem.** Sliding windows are linear and local, but purely local attention has no guarantee it can represent what full attention can. Zaheer et al. wanted the efficiency with a theoretical backstop.
 
@@ -250,7 +250,7 @@ Same content, condensed. Toggle at the top of the page switches between short pa
 ---
 
 ## 11 — Performer / FAVOR+
-`2020-09-30` ○ · Tier 2 · recurrent state · threads: recurrent, sparsity
+`2020-09-30` · Tier 2 · recurrent state · threads: recurrent, sparsity
 
 **Problem.** Linear attention's arbitrary feature map bothered people. If φ is a guess, the resulting attention is some *other* operation, not an approximation of softmax with a known error. Choromanski et al. wanted linear cost while provably approximating actual softmax.
 
@@ -294,7 +294,7 @@ Same content, condensed. Toggle at the top of the page switches between short pa
 
 **Mechanism.** Don't add anything. *Rotate.* Treat each pair of dimensions in q and k as a 2-D plane and rotate it by an angle proportional to the token's position, with each pair rotating at a different frequency. Because a dot product between two rotated vectors depends only on the difference of their rotation angles, `⟨R_m q, R_n k⟩` is a function of m−n. Absolute rotations in, relative dependence out, for free, with no extra term in the attention computation.
 
-**Buys.** Relative positioning with zero additional attention-time cost. No parameters. Position never contaminates the value vectors, only the query–key interaction. Attention decays gently with distance as an emergent property, not an imposed one. Compatible with linear attention, which additive relative biases are not. Defined at every position.
+**Buys.** Relative positioning with zero additional attention-time cost. No parameters. Position never contaminates the value vectors, only the query–key interaction. The query–key interaction depends on relative distance, producing distance-dependent behaviour without adding an explicit positional bias term. Compatible with linear attention, which additive relative biases are not. Defined at every position.
 
 **Costs.** Extrapolation is *worse* than the elegance suggests — beyond training length, high-frequency dimensions have rotated into angular regions the model never saw, and quality collapses rather than degrading gracefully. This single failure mode generates the PI, NTK-aware and YaRN entries and arguably 31. The base frequency (usually 10000) is a hyperparameter with outsized effect that nobody tuned properly for years. It bakes in a recency bias that is right for language and wrong for some other modalities. And it interacts badly with KV compression — MLA needs a dedicated uncompressed slice purely to accommodate it.
 
@@ -313,7 +313,7 @@ Same content, condensed. Toggle at the top of the page switches between short pa
 
 **Mechanism.** Compute the scores, keep only the k largest per query, zero the rest, renormalise. Because softmax weights decay fast, the top k captures nearly all the attention mass. The paper's contribution is doing this memory-efficiently — scores are computed in chunks and only the top k retained, so the full N×N matrix never materialises.
 
-**Buys.** Content-dependent sparsity: the model attends to what matters rather than what is nearby. Provably close to full attention when the distribution is peaked, which it usually is. Memory savings without retraining. A clean knob — k — trading quality against cost.
+**Buys.** Content-dependent sparsity: the model attends to what matters rather than what is nearby. Can closely approximate full attention where the attention distribution is strongly peaked, as observed in the paper's evaluated settings. Memory savings without retraining. A clean knob — k — trading quality against cost.
 
 **Costs.** You must compute all the scores to find the top k, so the *compute* cost stays O(N²) even though memory drops. This is the central limitation, and it is why the idea waited four years for a fix. Top-k selection is itself expensive and hostile to parallel hardware. Hard thresholding is discontinuous, so training with it is awkward; the paper leans toward inference-time use. And when attention genuinely is flat — which happens, particularly in early layers — truncating to k tokens discards real signal.
 
@@ -332,13 +332,13 @@ Same content, condensed. Toggle at the top of the page switches between short pa
 
 **Mechanism.** Delete positional embeddings entirely. Instead subtract a penalty from each attention score proportional to the distance between query and key: `score − m·|i−j|`, where m is a fixed per-head slope from a geometric sequence. Different heads get different slopes, so some are sharply local and others nearly global. Nothing is learned.
 
-**Buys.** Extrapolates genuinely — train at 1024, run at 2048 or beyond with perplexity holding. Zero parameters. Trains 11% faster and uses 11% less memory than sinusoidal. Trivial to implement. Adding a bias to scores works with any attention implementation.
+**Buys.** Substantially better length extrapolation than the schemes compared in the paper: models trained at 1024 tokens are evaluated at longer lengths without the sharp degradation those alternatives show. Zero parameters. Trains 11% faster and uses 11% less memory than sinusoidal. Trivial to implement. Adding a bias to scores works with any attention implementation.
 
 **Costs.** The linear recency penalty is a hard inductive bias, not a learned preference: distant tokens are penalised whether or not they matter. This makes ALiBi weaker on tasks requiring precise long-range retrieval, and later work found its "long context" is partly an illusion — it extrapolates perplexity well while not actually using the far context much. The slopes are hand-chosen and only weakly justified. It cannot express non-monotonic positional relationships at all. And it is incompatible with the KV-compression tricks that RoPE-based models use.
 
 **Pick when.** Length extrapolation with no fine-tuning is the priority; streaming; perplexity-shaped workloads.
 
-**Avoid when.** Long-range retrieval accuracy matters. Most frontier models chose RoPE plus a scaling method (21–23) over ALiBi, and that is the informative fact.
+**Avoid when.** Long-range retrieval accuracy matters. RoPE plus a scaling method became the more common choice in large decoder-only models. ALiBi remains preferable where extrapolation without any interpolation step is the priority.
 
 **Lineage.** From T5's relative position bias, which added a *learned* bias to scores — ALiBi's move is to stop learning it. From (relative positions). Conceptual sibling of NoPE and DroPE: all three argue that explicit position embeddings are the problem.
 
@@ -400,7 +400,7 @@ Same content, condensed. Toggle at the top of the page switches between short pa
 ---
 
 ## 18 — NoPE (No Positional Encoding)
-`2023-05-31` ○ · Tier 2 · position · threads: position
+`2023-05-31` · Tier 2 · position · threads: position
 
 **Problem.** Every positional scheme since 2017 had been a design problem: which encoding, which frequencies, which biases. Kazemnejad et al. asked a question nobody had bothered to test properly — what happens if you use *none*?
 
@@ -459,7 +459,7 @@ Same content, condensed. Toggle at the top of the page switches between short pa
 ---
 
 ## 21 — YaRN
-`2023-08-31` ○ · Tier 1 · position (shared) · threads: position, context
+`2023-08-31` · Tier 1 · position (shared) · threads: position, context
 
 **Problem.** By August 2023 there were two context-extension methods, each with the other's strength. PI needed fine-tuning and wrecked local resolution. NTK-aware needed no fine-tuning but fell apart at large factors and had no theory. Peng et al. wanted one method that scaled far, cheaply, with a derivation.
 
@@ -524,7 +524,7 @@ Same content, condensed. Toggle at the top of the page switches between short pa
 ---
 
 ## 24 — DeltaNet (parallelized)
-`2024-06-10` ○ · Tier 2 · recurrent state · threads: recurrent
+`2024-06-10` · Tier 2 · recurrent state · threads: recurrent
 
 **Problem.** The delta rule had been sitting unused for three years for one reason: its update is sequential. Each step reads the state the previous step wrote, so it cannot be parallelised across the sequence the way linear attention can, and on modern hardware an algorithm that cannot saturate a GPU does not get trained at scale regardless of its merits.
 
@@ -680,4 +680,3 @@ Not speculation — the frontier as it currently stands, with sources.
 Gated DeltaNet-2 (2026-05-21, arXiv 2605.22791) decouples the erase and write operations that Gated DeltaNet coupled, generalising both GDN and KDA. The direction of the recurrent branch over eighteen months is unmistakable: progressively finer-grained control over a fixed-size state. Scalar decay, then channel-wise decay, then decoupled erase and write.
 
 Meanwhile every strong 2025–26 linear model is a *hybrid*, which is the field conceding that a fixed state cannot do exact retrieval and hedging accordingly. The live question is not whether attention gets replaced but what the ratio should be, and whether the ratio should be learned.
-

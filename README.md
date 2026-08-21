@@ -65,13 +65,16 @@ verification state is published rather than assumed:
 
 | Status | Meaning | Count |
 |---|---|---:|
-| `primary` | arXiv abstract page read directly | 18 |
-| `secondary` | two or more independent sources agree, primary page not yet read | 10 |
-| `user` | supplied by a human who opened the source directly | 1 |
+| `primary` | source read directly | 28 |
+| `user` | no paper exists; confirmed by a human opening the source | 1 |
 
-Anything not `primary` renders with a visible **"(unverified)"** label in the app and is counted in
-the site footer. The parser propagates this from a `○` marker in `CONTENT.md`, so a date cannot be
-presented as certain by accident.
+All 29 first-appearance dates are verified. Four adoption markers (model-release dates) remain
+unconfirmed and are labelled inline in the app.
+
+
+Anything unconfirmed renders with a visible **"(unverified)"** label in the app. The parser
+propagates this from a `○` marker in `CONTENT.md` and tracks first-appearance and adoption dates
+separately, so a date cannot be presented as certain by accident.
 
 Three entries deserve mention:
 

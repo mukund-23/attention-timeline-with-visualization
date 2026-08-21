@@ -44,7 +44,9 @@ for b in entries:
                 and not s.startswith('threads') and not s.startswith('adopted')), 'none')
     tm = re.search(r'threads:\s*(.+)$', meta)
     threads = [t.strip() for t in tm.group(1).split(',')] if tm else []
-    unverified = '○' in meta
+    _appeared_seg = meta.split('·')[0]
+    unverified = '○' in _appeared_seg
+    adopted_unverified = bool(am) and '○' in meta.split('adopted')[1].split('·')[0]
 
     note = ' '.join(re.sub(r'^>\s*','',l).strip() for l in lines if l.strip().startswith('>')) or None
 
@@ -67,7 +69,7 @@ for b in entries:
 
     out.append(dict(
         id=slug(name), num=int(num), name=name, date=date, adopted=adopted,
-        dateUnverified=unverified, tier=tier, viz=viz, threads=threads,
+        dateUnverified=unverified, adoptedUnverified=adopted_unverified, tier=tier, viz=viz, threads=threads,
         evidence=ev, note=note, callout=callout,
         problem=fields['Problem'], mechanism=fields['Mechanism'],
         buys=split_items(fields['Buys']), costs=split_items(fields['Costs']),

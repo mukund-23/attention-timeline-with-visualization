@@ -40,7 +40,7 @@ export default function EntryCard({ e, dim = false }: { e: Entry; dim?: boolean 
           {e.date}{e.dateUnverified && ' (unverified)'}
           {e.adopted && (
             <> &nbsp;·&nbsp; <span className="gap">
-              became standard {e.adopted} — {Math.round(gap / 12 * 10) / 10} yr later
+              became standard {e.adopted}{e.adoptedUnverified && ' (unverified)'} — {Math.round(gap / 12 * 10) / 10} yr later
             </span></>
           )}
         </p>
