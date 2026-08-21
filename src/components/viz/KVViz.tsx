@@ -1,4 +1,5 @@
 import { useState } from 'react'
+import { COLORS } from '../../colors'
 
 type Scheme = 'mha' | 'mqa' | 'gqa' | 'mla'
 
@@ -45,34 +46,34 @@ export default function KVViz({ entryId }: { entryId: string }) {
       <div className="viz-body">
         <svg width={300} height={190} viewBox="0 0 300 190" role="img"
           aria-label={`${cfg.scheme.toUpperCase()} wiring: ${qh} query heads to ${kvHeads} key-value heads`}>
-          <text x={10} y={16} fontSize={10} fontFamily="monospace" fill="#8B959A">query heads</text>
+          <text x={10} y={16} fontSize={10} fontFamily="monospace" fill={COLORS.faint}>query heads</text>
           {Array.from({ length: qh }, (_, i) => (
-            <rect key={i} x={10 + i * 35} y={24} width={26} height={20} fill="#21506E" opacity={0.85} />
+            <rect key={i} x={10 + i * 35} y={24} width={26} height={20} fill={COLORS.keep} opacity={0.85} />
           ))}
           {Array.from({ length: qh }, (_, i) => {
             const target = cfg.scheme === 'mha' ? i : Math.floor(i / (qh / kvHeads))
             const x1 = 23 + i * 35
             const x2 = cfg.scheme === 'mla' ? 150 : 23 + target * 35 * (qh / kvHeads) + (35 * (qh / kvHeads) - 26) / 2
-            return <line key={i} x1={x1} y1={44} x2={x2} y2={cfg.scheme === 'mla' ? 108 : 128} stroke="#C7D0CE" strokeWidth={1} />
+            return <line key={i} x1={x1} y1={44} x2={x2} y2={cfg.scheme === 'mla' ? 108 : 128} stroke={COLORS.rule} strokeWidth={1} />
           })}
           {cfg.scheme === 'mla' && (
             <>
-              <rect x={110} y={108} width={80} height={18} fill="#B08A2A" opacity={0.7} />
-              <text x={150} y={121} fontSize={9} fontFamily="monospace" fill="#fff" textAnchor="middle">latent</text>
-              <line x1={150} y1={126} x2={150} y2={128} stroke="#C7D0CE" />
+              <rect x={110} y={108} width={80} height={18} fill={COLORS.cost} opacity={0.7} />
+              <text x={150} y={121} fontSize={9} fontFamily="monospace" fill={COLORS.white} textAnchor="middle">latent</text>
+              <line x1={150} y1={126} x2={150} y2={128} stroke={COLORS.rule} />
             </>
           )}
-          <text x={10} y={148} fontSize={10} fontFamily="monospace" fill="#8B959A">
+          <text x={10} y={148} fontSize={10} fontFamily="monospace" fill={COLORS.faint}>
             {cfg.scheme === 'mla' ? 'cached latent, re-expanded' : `${kvHeads} key/value head${kvHeads > 1 ? 's' : ''} cached`}
           </text>
           {Array.from({ length: cfg.scheme === 'mla' ? 1 : kvHeads }, (_, i) => {
             const w = cfg.scheme === 'mla' ? 80 : (26 * qh + 9 * (qh - 1)) / kvHeads - 6
             const x = cfg.scheme === 'mla' ? 110 : 10 + i * ((280) / kvHeads)
-            return <rect key={i} x={x} y={128} width={cfg.scheme === 'mla' ? w : Math.max(20, w)} height={16} fill="#21506E" opacity={0.35} />
+            return <rect key={i} x={x} y={128} width={cfg.scheme === 'mla' ? w : Math.max(20, w)} height={16} fill={COLORS.keep} opacity={0.35} />
           })}
-          <rect x={10} y={166} width={280} height={12} fill="#E4E9E7" />
-          <rect x={10} y={166} width={Math.max(3, 280 * (mine / base))} height={12} fill="#B08A2A" opacity={0.75} />
-          <text x={10} y={188} fontSize={9} fontFamily="monospace" fill="#8B959A">
+          <rect x={10} y={166} width={280} height={12} fill={COLORS.ruleSoft} />
+          <rect x={10} y={166} width={Math.max(3, 280 * (mine / base))} height={12} fill={COLORS.cost} opacity={0.75} />
+          <text x={10} y={188} fontSize={9} fontFamily="monospace" fill={COLORS.faint}>
             bar: cache size relative to MHA at the same context
           </text>
         </svg>

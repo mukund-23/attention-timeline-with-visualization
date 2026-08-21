@@ -1,4 +1,5 @@
 import { useMemo, useState } from 'react'
+import { COLORS } from '../../colors'
 
 type Rule = 'linear' | 'delta' | 'gated' | 'channel' | 'segment' | 'kernel'
 
@@ -99,18 +100,18 @@ export default function RecurrentViz({ entryId }: { entryId: string }) {
       <div className="viz-body">
         <svg width={W} height={H} viewBox={`0 0 ${W} ${H}`} role="img"
           aria-label={`Retrieval quality against number of stored associations for ${cfg.label}`}>
-          <line x1={PAD} y1={py(1)} x2={W - PAD} y2={py(1)} stroke="#E4E9E7" strokeWidth={0.5} />
-          <line x1={px(NKEYS)} y1={PAD - 8} x2={px(NKEYS)} y2={H - PAD} stroke="#B08A2A" strokeWidth={1} strokeDasharray="3 3" />
-          <text x={px(NKEYS) + 5} y={PAD - 12} fontSize={9.5} fontFamily="monospace" fill="#B08A2A">keys start repeating</text>
+          <line x1={PAD} y1={py(1)} x2={W - PAD} y2={py(1)} stroke={COLORS.ruleSoft} strokeWidth={0.5} />
+          <line x1={px(NKEYS)} y1={PAD - 8} x2={px(NKEYS)} y2={H - PAD} stroke={COLORS.cost} strokeWidth={1} strokeDasharray="3 3" />
+          <text x={px(NKEYS) + 5} y={PAD - 12} fontSize={9.5} fontFamily="monospace" fill={COLORS.cost}>keys start repeating</text>
 
-          {baseline && <path d={path(baseline, 'all')} fill="none" stroke="#8B959A" strokeWidth={1.2} strokeDasharray="4 3" />}
-          <path d={path(mine, 'recent')} fill="none" stroke="#21506E" strokeWidth={1.2} opacity={0.4} />
-          <path d={path(mine, 'all')} fill="none" stroke="#21506E" strokeWidth={2} />
+          {baseline && <path d={path(baseline, 'all')} fill="none" stroke={COLORS.faint} strokeWidth={1.2} strokeDasharray="4 3" />}
+          <path d={path(mine, 'recent')} fill="none" stroke={COLORS.keep} strokeWidth={1.2} opacity={0.4} />
+          <path d={path(mine, 'all')} fill="none" stroke={COLORS.keep} strokeWidth={2} />
 
-          <line x1={PAD} y1={H - PAD} x2={W - PAD} y2={H - PAD} stroke="#C7D0CE" strokeWidth={0.5} />
-          <text x={PAD} y={H - 14} fontSize={9.5} fontFamily="monospace" fill="#8B959A">writes (keys repeat) →</text>
-          <text x={PAD - 6} y={py(1) + 3} fontSize={9.5} fontFamily="monospace" fill="#8B959A" textAnchor="end">1.0</text>
-          <text x={PAD - 6} y={py(0) + 3} fontSize={9.5} fontFamily="monospace" fill="#8B959A" textAnchor="end">0</text>
+          <line x1={PAD} y1={H - PAD} x2={W - PAD} y2={H - PAD} stroke={COLORS.rule} strokeWidth={0.5} />
+          <text x={PAD} y={H - 14} fontSize={9.5} fontFamily="monospace" fill={COLORS.faint}>writes (keys repeat) →</text>
+          <text x={PAD - 6} y={py(1) + 3} fontSize={9.5} fontFamily="monospace" fill={COLORS.faint} textAnchor="end">1.0</text>
+          <text x={PAD - 6} y={py(0) + 3} fontSize={9.5} fontFamily="monospace" fill={COLORS.faint} textAnchor="end">0</text>
         </svg>
         <div className="viz-side">
           <p className="viz-note">{cfg.note}</p>
@@ -120,9 +121,9 @@ export default function RecurrentViz({ entryId }: { entryId: string }) {
             <b>{d}</b>
           </label>
           <div className="viz-key">
-            <span><i style={{ background: '#21506E', height: 2 }} />all keys — is the current value returned?</span>
-            <span><i style={{ background: '#21506E', opacity: .4, height: 2 }} />the key just written</span>
-            {baseline && <span><i style={{ background: '#8B959A', height: 2 }} />plain additive update, same state size</span>}
+            <span><i style={{ background: COLORS.keep, height: 2 }} />all keys — is the current value returned?</span>
+            <span><i style={{ background: COLORS.keep, opacity: .4, height: 2 }} />the key just written</span>
+            {baseline && <span><i style={{ background: COLORS.faint, height: 2 }} />plain additive update, same state size</span>}
           </div>
           <p className="viz-fine">
             A real simulation, not an illustration. {NKEYS} keys are written repeatedly, each time with a

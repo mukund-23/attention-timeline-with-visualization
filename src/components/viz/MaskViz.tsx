@@ -1,4 +1,5 @@
 import { useMemo, useState } from 'react'
+import { COLORS } from '../../colors'
 
 const N = 20
 
@@ -65,16 +66,16 @@ export default function MaskViz({ entryId }: { entryId: string }) {
     for (let i = 0; i < N; i++) {
       for (let j = 0; j < N; j++) {
         const x = j * 16, y = i * 16
-        if (j > i) { out.push(<rect key={`${i}-${j}`} x={x} y={y} width={14} height={14} fill="none" stroke="#E4E9E7" strokeWidth={0.5} />); continue }
+        if (j > i) { out.push(<rect key={`${i}-${j}`} x={x} y={y} width={14} height={14} fill="none" stroke={COLORS.ruleSoft} strokeWidth={0.5} />); continue }
         causal++
         if (f(i, j)) {
           kept++
           const w = Math.min(1, Math.max(0.3, scores[i][j]))
-          out.push(<rect key={`${i}-${j}`} x={x} y={y} width={14} height={14} fill="#21506E" opacity={w} />)
+          out.push(<rect key={`${i}-${j}`} x={x} y={y} width={14} height={14} fill={COLORS.keep} opacity={w} />)
         } else {
           out.push(<rect key={`${i}-${j}`} x={x} y={y} width={14} height={14}
-            fill={showLost ? '#B08A2A' : 'none'} opacity={showLost ? 0.5 : 1}
-            stroke={showLost ? 'none' : '#E4E9E7'} strokeWidth={0.5} />)
+            fill={showLost ? COLORS.cost : 'none'} opacity={showLost ? 0.5 : 1}
+            stroke={showLost ? 'none' : COLORS.ruleSoft} strokeWidth={0.5} />)
         }
       }
     }
@@ -112,9 +113,9 @@ export default function MaskViz({ entryId }: { entryId: string }) {
             </label>
           )}
           <div className="viz-key">
-            <span><i style={{ background: '#21506E' }} />computed, shaded by weight</span>
-            <span><i style={{ background: '#B08A2A', opacity: .5 }} />discarded — dense would use it</span>
-            <span><i style={{ border: '1px solid #E4E9E7' }} />masked by causality</span>
+            <span><i style={{ background: COLORS.keep }} />computed, shaded by weight</span>
+            <span><i style={{ background: COLORS.cost, opacity: .5 }} />discarded — dense would use it</span>
+            <span><i style={{ border: `1px solid ${COLORS.ruleSoft}` }} />masked by causality</span>
           </div>
         </div>
       </div>

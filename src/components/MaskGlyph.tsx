@@ -1,3 +1,5 @@
+import { COLORS } from '../colors'
+
 const N = 7
 
 function pattern(id: string): (i: number, j: number) => number {
@@ -47,8 +49,8 @@ export default function MaskGlyph({ id, label }: { id: string; label: string }) 
       const v = f(i, j)
       cells.push(
         <rect key={`${i}-${j}`} x={j * 6} y={i * 6} width={5} height={5}
-          fill={v > 0 ? '#21506E' : 'none'}
-          stroke={v > 0 ? 'none' : '#DDE3E1'} strokeWidth={0.5}
+          fill={v > 0 ? COLORS.keep : 'none'}
+          stroke={v > 0 ? 'none' : COLORS.ruleSoft} strokeWidth={0.5}
           opacity={v > 0 ? v : 1} />
       )
     }

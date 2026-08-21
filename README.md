@@ -1,4 +1,4 @@
-# The attention timeline
+# The Attention Timeline
 
 Every attention mechanism from May 2017 to December 2025, in the order it was published,
 each explained as an answer to a problem that existed at that moment — with honest trade-offs.

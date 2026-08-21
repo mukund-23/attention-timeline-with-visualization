@@ -1,4 +1,5 @@
 import { useState } from 'react'
+import { COLORS } from '../../colors'
 
 const D = 64, SRAM_KB = 192
 
@@ -21,25 +22,25 @@ export default function FlashViz() {
       <div className="viz-body">
         <svg width={330} height={190} viewBox="0 0 330 190" role="img"
           aria-label="Comparison of HBM traffic between standard and tiled attention">
-          <rect x={10} y={14} width={130} height={68} fill="none" stroke="#C7D0CE" strokeWidth={0.5} />
-          <text x={75} y={34} fontSize={10} fontFamily="monospace" fill="#5A646B" textAnchor="middle">HBM — large, slow</text>
-          <rect x={30} y={44} width={90} height={26} fill="#B08A2A" opacity={0.55} />
-          <text x={75} y={61} fontSize={9.5} fontFamily="monospace" fill="#fff" textAnchor="middle">N x N scores</text>
+          <rect x={10} y={14} width={130} height={68} fill="none" stroke={COLORS.rule} strokeWidth={0.5} />
+          <text x={75} y={34} fontSize={10} fontFamily="monospace" fill={COLORS.muted} textAnchor="middle">HBM — large, slow</text>
+          <rect x={30} y={44} width={90} height={26} fill={COLORS.cost} opacity={0.55} />
+          <text x={75} y={61} fontSize={9.5} fontFamily="monospace" fill={COLORS.white} textAnchor="middle">N x N scores</text>
 
-          <rect x={190} y={14} width={130} height={68} fill="none" stroke="#C7D0CE" strokeWidth={0.5} />
-          <text x={255} y={34} fontSize={10} fontFamily="monospace" fill="#5A646B" textAnchor="middle">SRAM — small, fast</text>
-          <rect x={228} y={44} width={54} height={26} fill="#21506E" opacity={0.75} />
-          <text x={255} y={61} fontSize={9.5} fontFamily="monospace" fill="#fff" textAnchor="middle">one tile</text>
+          <rect x={190} y={14} width={130} height={68} fill="none" stroke={COLORS.rule} strokeWidth={0.5} />
+          <text x={255} y={34} fontSize={10} fontFamily="monospace" fill={COLORS.muted} textAnchor="middle">SRAM — small, fast</text>
+          <rect x={228} y={44} width={54} height={26} fill={COLORS.keep} opacity={0.75} />
+          <text x={255} y={61} fontSize={9.5} fontFamily="monospace" fill={COLORS.white} textAnchor="middle">one tile</text>
 
-          <text x={10} y={108} fontSize={10} fontFamily="monospace" fill="#5A646B">standard</text>
-          <rect x={72} y={98} width={250} height={13} fill="#B08A2A" opacity={0.7} />
-          <text x={72} y={124} fontSize={9.5} fontFamily="monospace" fill="#8B959A">{fmt(standard)}</text>
+          <text x={10} y={108} fontSize={10} fontFamily="monospace" fill={COLORS.muted}>standard</text>
+          <rect x={72} y={98} width={250} height={13} fill={COLORS.cost} opacity={0.7} />
+          <text x={72} y={124} fontSize={9.5} fontFamily="monospace" fill={COLORS.faint}>{fmt(standard)}</text>
 
-          <text x={10} y={150} fontSize={10} fontFamily="monospace" fill="#5A646B">tiled</text>
-          <rect x={72} y={140} width={barW(tiled)} height={13} fill="#21506E" opacity={0.8} />
-          <text x={72} y={166} fontSize={9.5} fontFamily="monospace" fill="#8B959A">{fmt(tiled)}</text>
+          <text x={10} y={150} fontSize={10} fontFamily="monospace" fill={COLORS.muted}>tiled</text>
+          <rect x={72} y={140} width={barW(tiled)} height={13} fill={COLORS.keep} opacity={0.8} />
+          <text x={72} y={166} fontSize={9.5} fontFamily="monospace" fill={COLORS.faint}>{fmt(tiled)}</text>
 
-          <text x={10} y={185} fontSize={9.5} fontFamily="monospace" fill="#8B959A">identical output in both cases</text>
+          <text x={10} y={185} fontSize={9.5} fontFamily="monospace" fill={COLORS.faint}>identical output in both cases</text>
         </svg>
         <div className="viz-side">
           <p className="viz-note">

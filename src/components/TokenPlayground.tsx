@@ -1,4 +1,5 @@
 import { useMemo, useState } from 'react'
+import { COLORS } from '../colors'
 
 type Kind = 'dense' | 'window' | 'sink' | 'strided' | 'bigbird' | 'block' | 'topk'
 
@@ -176,13 +177,13 @@ export default function TokenPlayground() {
               role="img" aria-label={`Mask grid: ${kept} of ${causal} word pairs kept`}>
               {tokens.map((_, i) => tokens.map((_, j) => {
                 const x = j * cell, y = i * cell
-                if (j > i) return <rect key={`${i}-${j}`} x={x} y={y} width={cell - 1} height={cell - 1} fill="none" stroke="#E4E9E7" strokeWidth={0.5} />
+                if (j > i) return <rect key={`${i}-${j}`} x={x} y={y} width={cell - 1} height={cell - 1} fill="none" stroke={COLORS.ruleSoft} strokeWidth={0.5} />
                 const ok = f(i, j)
                 return <rect key={`${i}-${j}`} x={x} y={y} width={cell - 1} height={cell - 1}
-                  fill={ok ? '#21506E' : '#B08A2A'} opacity={ok ? (i === q ? 1 : 0.6) : (i === q ? 0.7 : 0.28)} />
+                  fill={ok ? COLORS.keep : COLORS.cost} opacity={ok ? (i === q ? 1 : 0.6) : (i === q ? 0.7 : 0.28)} />
               }))}
               <rect x={0} y={q * cell} width={tokens.length * cell} height={cell - 1}
-                fill="none" stroke="#14181B" strokeWidth={1} />
+                fill="none" stroke={COLORS.ink} strokeWidth={1} />
             </svg>
             <p className="pgaxis">rows = the word looking · columns = the word looked at</p>
             {farthest && (

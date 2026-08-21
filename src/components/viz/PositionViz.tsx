@@ -1,4 +1,5 @@
 import { useMemo, useState } from 'react'
+import { COLORS } from '../../colors'
 
 const W = 460, H = 190, PAD = 34
 const DIMS = 8
@@ -115,17 +116,17 @@ export default function PositionViz({ entryId }: { entryId: string }) {
         <svg width={W} height={H} viewBox={`0 0 ${W} ${H}`} role="img" aria-label={cfg.label}>
           {isRot && (
             <>
-              <rect x={PAD} y={PAD - 10} width={bandW} height={H - PAD * 2 + 20} fill="#21506E" opacity={0.07} />
-              <line x1={PAD + bandW} y1={PAD - 10} x2={PAD + bandW} y2={H - PAD + 10} stroke="#B08A2A" strokeWidth={1} strokeDasharray="3 3" />
-              <text x={PAD + bandW + 6} y={PAD - 14} fontSize={10} fill="#B08A2A" fontFamily="monospace">trained length</text>
+              <rect x={PAD} y={PAD - 10} width={bandW} height={H - PAD * 2 + 20} fill={COLORS.keep} opacity={0.07} />
+              <line x1={PAD + bandW} y1={PAD - 10} x2={PAD + bandW} y2={H - PAD + 10} stroke={COLORS.cost} strokeWidth={1} strokeDasharray="3 3" />
+              <text x={PAD + bandW + 6} y={PAD - 14} fontSize={10} fill={COLORS.cost} fontFamily="monospace">trained length</text>
             </>
           )}
           {paths.map(p => (
-            <path key={p.dim} d={p.d} fill="none" stroke="#21506E"
+            <path key={p.dim} d={p.d} fill="none" stroke={COLORS.keep}
               strokeWidth={1.2} opacity={0.25 + (1 - p.dim / DIMS) * 0.6} />
           ))}
-          <line x1={PAD} y1={H - PAD} x2={W - PAD} y2={H - PAD} stroke="#C7D0CE" strokeWidth={0.5} />
-          <text x={PAD} y={H - 12} fontSize={10} fill="#8B959A" fontFamily="monospace">
+          <line x1={PAD} y1={H - PAD} x2={W - PAD} y2={H - PAD} stroke={COLORS.rule} strokeWidth={0.5} />
+          <text x={PAD} y={H - 12} fontSize={10} fill={COLORS.faint} fontFamily="monospace">
             {isRot ? 'position' : cfg.variant === 'alibi' ? 'distance between tokens' : 'position / distance'}
           </text>
         </svg>
@@ -148,9 +149,9 @@ export default function PositionViz({ entryId }: { entryId: string }) {
             </>
           )}
           <div className="viz-key">
-            <span><i style={{ background: '#21506E', opacity: .85 }} />fast dimensions — fine local position</span>
-            <span><i style={{ background: '#21506E', opacity: .3 }} />slow dimensions — coarse global position</span>
-            {isRot && <span><i style={{ background: '#21506E', opacity: .07 }} />trained range</span>}
+            <span><i style={{ background: COLORS.keep, opacity: .85 }} />fast dimensions — fine local position</span>
+            <span><i style={{ background: COLORS.keep, opacity: .3 }} />slow dimensions — coarse global position</span>
+            {isRot && <span><i style={{ background: COLORS.keep, opacity: .07 }} />trained range</span>}
           </div>
         </div>
       </div>

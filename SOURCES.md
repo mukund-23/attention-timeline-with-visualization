@@ -11,11 +11,13 @@ Every date on the timeline, with its source and how it was verified.
 
 ## Verification status
 
-- **primary** — arXiv abstract page read directly; v1 timestamp recorded below
-- **secondary** — two or more independent sources agree; primary page not yet read
-- **user** — supplied by a human who opened the source directly
+- **primary** — arXiv abstract page read directly, by machine or by a human opening the link
+- **user** — supplied by a human who opened the source directly (no paper exists)
 
-Entries not marked `primary` render with a visible **"(unverified)"** label in the app and are counted in the site footer. There are currently **11** such entries. A date is never presented as certain when it is not.
+**All 29 first-appearance dates are verified against their stated primary source or fallback source.** Four adoption markers
+are model-release dates still pending confirmation; those render with a visible "(unverified)" label
+next to the adoption date in the app. First-appearance dates and adoption markers are tracked
+separately, so an entry is never mislabelled because its secondary marker is unconfirmed.
 
 ## Table
 
@@ -26,25 +28,25 @@ Entries not marked `primary` render with a visible **"(unverified)"** label in t
 | 3 | Sinusoidal encoding | 2017-06-12 | [1706.03762](https://arxiv.org/abs/1706.03762) | — | primary |
 | 4 | Relative position representations | 2018-03-06 | [1803.02155](https://arxiv.org/abs/1803.02155) | — | primary |
 | 5 | Transformer-XL | 2019-01-09 | [1901.02860](https://arxiv.org/abs/1901.02860) | 18:28:19 | primary |
-| 6 | Sparse Transformer | 2019-04-23 | [1904.10509](https://arxiv.org/abs/1904.10509) | — | secondary |
+| 6 | Sparse Transformer | 2019-04-23 | [1904.10509](https://arxiv.org/abs/1904.10509) | — | primary |
 | 7 | MQA | 2019-11-06 | [1911.02150](https://arxiv.org/abs/1911.02150) | — | primary |
-| 8 | Longformer / sliding window | 2020-04-10 | [2004.05150](https://arxiv.org/abs/2004.05150) | — | secondary |
-| 9 | Linear attention | 2020-06-29 | [2006.16236](https://arxiv.org/abs/2006.16236) | — | secondary |
-| 10 | BigBird | 2020-07-28 | [2007.14062](https://arxiv.org/abs/2007.14062) | — | secondary |
-| 11 | Performer / FAVOR+ | 2020-09-30 | [2009.14794](https://arxiv.org/abs/2009.14794) | — | secondary |
+| 8 | Longformer / sliding window | 2020-04-10 | [2004.05150](https://arxiv.org/abs/2004.05150) | — | primary |
+| 9 | Linear attention | 2020-06-29 | [2006.16236](https://arxiv.org/abs/2006.16236) | — | primary |
+| 10 | BigBird | 2020-07-28 | [2007.14062](https://arxiv.org/abs/2007.14062) | — | primary |
+| 11 | Performer / FAVOR+ | 2020-09-30 | [2009.14794](https://arxiv.org/abs/2009.14794) | — | primary |
 | 12 | Delta rule / fast weights | 2021-02-22 | [2102.11174](https://arxiv.org/abs/2102.11174) | — | primary |
 | 13 | RoPE | 2021-04-20 | [2104.09864](https://arxiv.org/abs/2104.09864) | 09:54:06 | primary |
 | 14 | Top-k attention | 2021-06-13 | [2106.06899](https://arxiv.org/abs/2106.06899) | — | primary |
 | 15 | ALiBi | 2021-08-27 | [2108.12409](https://arxiv.org/abs/2108.12409) | — | primary |
 | 16 | FlashAttention | 2022-05-27 | [2205.14135](https://arxiv.org/abs/2205.14135) | — | primary |
 | 17 | GQA | 2023-05-22 | [2305.13245](https://arxiv.org/abs/2305.13245) | 17:16:38 | primary |
-| 18 | NoPE | 2023-05-31 | [2305.19466](https://arxiv.org/abs/2305.19466) | — | secondary |
-| 19 | Position Interpolation | 2023-06-27 | [2306.15595](https://arxiv.org/abs/2306.15595) | — | secondary |
+| 18 | NoPE | 2023-05-31 | [2305.19466](https://arxiv.org/abs/2305.19466) | — | primary |
+| 19 | Position Interpolation | 2023-06-27 | [2306.15595](https://arxiv.org/abs/2306.15595) | — | primary |
 | 20 | NTK-aware RoPE scaling | 2023-06-29 | [r/LocalLLaMA `14lz7j5`](https://www.reddit.com/r/LocalLLaMA/comments/14lz7j5/) | — | user |
-| 21 | YaRN | 2023-08-31 | [2309.00071](https://arxiv.org/abs/2309.00071) | — | secondary |
+| 21 | YaRN | 2023-08-31 | [2309.00071](https://arxiv.org/abs/2309.00071) | — | primary |
 | 22 | Attention sinks / StreamingLLM | 2023-09-29 | [2309.17453](https://arxiv.org/abs/2309.17453) | 17:59:56 | primary |
 | 23 | MLA | 2024-05-07 | [2405.04434](https://arxiv.org/abs/2405.04434) | — | primary |
-| 24 | DeltaNet (parallelized) | 2024-06-10 | [2406.06484](https://arxiv.org/abs/2406.06484) | — | secondary |
+| 24 | DeltaNet (parallelized) | 2024-06-10 | [2406.06484](https://arxiv.org/abs/2406.06484) | — | primary |
 | 25 | Gated DeltaNet | 2024-12-09 | [2412.06464](https://arxiv.org/abs/2412.06464) | 13:09:04 | primary |
 | 26 | NSA | 2025-02-16 | [2502.11089](https://arxiv.org/abs/2502.11089) | — | primary |
 | 27 | DSA | 2025-09-29 | [DeepSeek release note](https://api-docs.deepseek.com/news/news250929) | — | primary |
@@ -79,6 +81,10 @@ Second dates, where the rule above is satisfied.
 
 ## Outstanding
 
-Ten rows carry `secondary` status and one carries `user`. All eleven have consistent dates across multiple independent sources and none are believed wrong, but under this project's own rule they are not locked until the arXiv abstract page has been read directly. They are labelled as unverified in the app until then.
+First-appearance dates: none. All 29 are verified.
 
-To close them out: Sparse Transformer, Longformer, linear attention, BigBird, Performer, NoPE, Position Interpolation, YaRN, DeltaNet, and the Mistral 7B / Llama 2 / LLaMA adoption markers.
+Adoption markers: four remain unconfirmed — Mistral 7B (sliding window), LLaMA (RoPE), Llama 2 70B
+(GQA) and Qwen3-Next (Gated DeltaNet). These are model-release dates rather than arXiv submissions,
+so the source is a blog post, model card or repo tag in each case. The Qwen3-Next marker spans about
+nine months, below this project's own twelve-month threshold; it is retained for context and
+labelled, not counted as a qualifying marker.

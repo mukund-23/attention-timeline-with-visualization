@@ -52,7 +52,7 @@ Same content, condensed. Toggle at the top of the page switches between short pa
 
 **Pick when.** Fixed, known, modest context. BERT-style encoders. Simplicity matters more than extrapolation.
 
-**Avoid when.** You will ever want more context than you trained on — which, since 2023, is always.
+**Avoid when.** You will ever want more context than you trained on.
 
 **Lineage.** Into BERT and GPT, which made it the default for years. Displaced by RoPE. Its failure mode is the entire reason the PI, NTK-aware and YaRN entries exist.
 
@@ -195,7 +195,7 @@ Same content, condensed. Toggle at the top of the page switches between short pa
 - Linear scaling in sequence length
 - Drop-in: same architecture, different mask
 - Receptive field grows with depth for free
-- At inference the KV cache is *bounded* rather than growing. Mistral's motivation was this, not the training cost
+- In decoder-only sliding-window models, the KV cache can be bounded rather than growing. Mistral's motivation was this, not the training cost
 
 **Costs**
 - Information between distant tokens must hop through ⌈distance/w⌉ layers, degrading at every hop. Deep receptive field is not the same as direct access
@@ -608,7 +608,7 @@ Same content, condensed. Toggle at the top of the page switches between short pa
 
 **Mechanism.** Kimi Delta Attention refines Gated DeltaNet's gating to be *channel-wise* — a fine-grained diagonal gate rather than a scalar, so each dimension of the state decays at its own learned rate. Deployed in a hybrid stack with a 3:1 ratio of KDA layers to full-attention layers, with the full-attention layers carrying exact retrieval.
 
-**Buys.** A reported ~75% KV cache reduction versus full attention, with large decoding throughput gains at long context. On Moonshot's reported benchmarks it outperforms full attention — notable because linear methods have historically been positioned as an acceptable compromise rather than an improvement. Channel-wise gating is a real expressiveness gain over scalar decay. The method was evaluated in a deployed model rather than only as an isolated research component.
+**Buys.** A reported ~75% KV cache reduction versus full attention, with large decoding throughput gains at long context. On Moonshot's reported benchmarks it outperforms full attention. Channel-wise gating is a real expressiveness gain over scalar decay. The method was evaluated in a deployed model rather than only as an isolated research component.
 
 **Costs.** The result is a *hybrid* — a quarter of the layers are still full attention, which is a concession that pure linear attention remains insufficient. The 3:1 ratio is empirical and probably task-dependent. Fine-grained gating adds parameters and complexity to an already intricate update. Custom kernels required. Single-lab evaluation of its own model.
 
@@ -657,7 +657,7 @@ Six framings, in the instructor's own terms and ours.
 
 **It wanted sparsity back, done properly (2025–).** NSA and DSA revive 2019 ideas with hardware alignment and learned selection. Simultaneously DroPE asks whether the positional apparatus is needed at all.
 
-**One sentence:** attention was never replaced because it was wrong; each generation found a different line on the bill — compute, bandwidth, cache, context, retention — and traded something to shrink it. Except once, when someone read the bill properly and found a charge that did not need paying at all.
+**One sentence:** attention was never replaced because it was wrong; each generation found a different line on the bill — compute, bandwidth, cache, context, retention — and traded something to shrink it. Except once, when someone found that the apparent computational bill was largely a memory-traffic bill.
 
 ## What comes next — the retrospective game
 
