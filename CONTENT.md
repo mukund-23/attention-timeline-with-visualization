@@ -54,7 +54,7 @@ Same content, condensed. Toggle at the top of the page switches between short pa
 
 **Avoid when.** You will ever want more context than you trained on — which, since 2023, is always.
 
-**Lineage.** Into BERT and GPT, which made it the default for years. Displaced by RoPE (RoPE). Its failure mode is the entire reason the PI, NTK-aware and YaRN entries exist.
+**Lineage.** Into BERT and GPT, which made it the default for years. Displaced by RoPE. Its failure mode is the entire reason the PI, NTK-aware and YaRN entries exist.
 
 ---
 
@@ -100,7 +100,7 @@ Same content, condensed. Toggle at the top of the page switches between short pa
 
 **Avoid when.** Long-context extrapolation is the goal. RoPE dominates on the same intuition, better executed.
 
-**Lineage.** Same paper as (standard attention). The frequency-based idea is the direct ancestor of RoPE (RoPE) and, through it, of everything in the PI, NTK-aware and YaRN entries.
+**Lineage.** Same paper as (standard attention). The frequency-based idea is the direct ancestor of RoPE and, through it, of everything in the PI, NTK-aware and YaRN entries.
 
 ---
 
@@ -119,12 +119,12 @@ Same content, condensed. Toggle at the top of the page switches between short pa
 
 **Avoid when.** You need speed, or you need resolution beyond the clip distance.
 
-**Lineage.** From (standard attention). Into Transformer-XL (Transformer-XL), which made the relative term efficient, and into T5's simplified learned-bucket bias — which is the direct conceptual predecessor of ALiBi (ALiBi), where the bias stops being learned at all. RoPE (RoPE) achieves the same relative property multiplicatively rather than additively.
+**Lineage.** From (standard attention). Into Transformer-XL, which made the relative term efficient, and into T5's simplified learned-bucket bias — which is the direct conceptual predecessor of ALiBi, where the bias stops being learned at all. RoPE achieves the same relative property multiplicatively rather than additively.
 
 ---
 
 ## 5 — Transformer-XL / Segment-Level Recurrence
-`2019-01-09` ○ · Tier 2 · recurrent state · threads: context, recurrent
+`2019-01-09` · Tier 2 · recurrent state · threads: context, recurrent
 
 **Problem.** Training a language model on long text means chopping it into fixed segments. Every segment boundary is a hard amnesia event: the model cannot see across it, and tokens at the start of a segment have no context at all. Dai et al. named this *context fragmentation*.
 
@@ -138,7 +138,7 @@ Same content, condensed. Toggle at the top of the page switches between short pa
 
 **Avoid when.** You need true gradient-carrying long-range learning.
 
-**Lineage.** From relative positions (relative positions). Its cache idea reappears in StreamingLLM (sinks) and in every KV-cache-management system since.
+**Lineage.** From relative positions. Its cache idea reappears in StreamingLLM (sinks) and in every KV-cache-management system since.
 
 ---
 
@@ -157,7 +157,7 @@ Same content, condensed. Toggle at the top of the page switches between short pa
 
 **Avoid when.** Dependencies are content-dependent and unpredictable, i.e. most language tasks.
 
-**Lineage.** First entry in the sparsity thread. Into Longformer (sliding window), BigBird (BigBird), and — after a five-year gap and a hardware-alignment rethink — NSA (NSA).
+**Lineage.** First entry in the sparsity thread. Into Longformer (sliding window), BigBird, and — after a five-year gap and a hardware-alignment rethink — NSA.
 
 ---
 
@@ -176,9 +176,9 @@ Same content, condensed. Toggle at the top of the page switches between short pa
 
 **Pick when.** Decode throughput dominates; memory-constrained serving; small models where cache is proportionally huge.
 
-**Avoid when.** Quality is paramount and you have the memory. GQA (GQA) is nearly always the better point on this curve.
+**Avoid when.** Quality is paramount and you have the memory. GQA is nearly always the better point on this curve.
 
-**Lineage.** Opens the KV thread, four years before anyone else cared. Into GQA (GQA) and MLA (MLA).
+**Lineage.** Opens the KV thread, four years before anyone else cared. Into GQA and MLA.
 
 ---
 
@@ -226,7 +226,7 @@ Same content, condensed. Toggle at the top of the page switches between short pa
 
 **Avoid when.** Exact retrieval matters. Pure linear attention still trails softmax attention on needle-in-a-haystack benchmarks, and the prominent 2025 models in this family are hybrids rather than pure recurrent stacks.
 
-**Lineage.** The fork in the road. Into the delta rule (the delta rule), DeltaNet (DeltaNet), Gated DeltaNet (Gated DeltaNet), KDA (KDA) — and out of the timeline into the SSM literature. Its weakness is the problem every one of those descendants is solving.
+**Lineage.** The fork in the road. Into the delta rule, DeltaNet, Gated DeltaNet, KDA — and out of the timeline into the SSM literature. Its weakness is the problem every one of those descendants is solving.
 
 ---
 
@@ -245,7 +245,7 @@ Same content, condensed. Toggle at the top of the page switches between short pa
 
 **Avoid when.** Decoder-only generation; wall-clock speed matters more than flop count.
 
-**Lineage.** From Sparse Transformer (Sparse Transformer) and Longformer (sliding window). Its lesson — that theoretically elegant sparsity can lose to hardware-friendly sparsity — is the premise NSA (NSA) is built on.
+**Lineage.** From Sparse Transformer and Longformer (sliding window). Its lesson — that theoretically elegant sparsity can lose to hardware-friendly sparsity — is the premise NSA is built on.
 
 ---
 
@@ -258,13 +258,13 @@ Same content, condensed. Toggle at the top of the page switches between short pa
 
 **Buys.** Linear time and space with an unbiased estimator and provable error bounds. Drops into a trained softmax model with limited fine-tuning. Rigorous where linear attention is heuristic.
 
-**Costs.** Approximation error is provably bounded but not zero, and variance rises exactly where attention is sharpest — which is where it matters most. Needs many random features for acceptable accuracy, eating the speed advantage; at practical sequence lengths it is often no faster than dense attention. Sampling random features adds implementation surface. And it lost, empirically: this branch was largely abandoned once FlashAttention (FlashAttention) made exact attention fast enough that a bounded-error approximation stopped being worth it.
+**Costs.** Approximation error is provably bounded but not zero, and variance rises exactly where attention is sharpest — which is where it matters most. Needs many random features for acceptable accuracy, eating the speed advantage; at practical sequence lengths it is often no faster than dense attention. Sampling random features adds implementation surface. And it lost, empirically: this branch was largely abandoned once FlashAttention made exact attention fast enough that a bounded-error approximation stopped being worth it.
 
 **Pick when.** Extremely long sequences where you need a formal error bound.
 
 **Avoid when.** Almost always, now. Kept on this timeline because it is the best representative of the 2020 approximation wave — and because it is FlashAttention's opponent.
 
-**Lineage.** From linear attention (linear attention). Superseded in practice by (FlashAttention).
+**Lineage.** From linear attention. Superseded in practice by (FlashAttention).
 
 ---
 
@@ -283,7 +283,7 @@ Same content, condensed. Toggle at the top of the page switches between short pa
 
 **Avoid when.** You need training throughput and don't have the chunked parallel algorithm — which is to say, before 2024.
 
-**Lineage.** From linear attention (linear attention), and from Schmidhuber 1992. Into DeltaNet (DeltaNet), which solved the parallelism problem, then Gated DeltaNet (Gated DeltaNet) and KDA (KDA).
+**Lineage.** From linear attention, and from Schmidhuber 1992. Into DeltaNet, which solved the parallelism problem, then Gated DeltaNet and KDA.
 
 ---
 
@@ -296,13 +296,13 @@ Same content, condensed. Toggle at the top of the page switches between short pa
 
 **Buys.** Relative positioning with zero additional attention-time cost. No parameters. Position never contaminates the value vectors, only the query–key interaction. Attention decays gently with distance as an emergent property, not an imposed one. Compatible with linear attention, which additive relative biases are not. Defined at every position.
 
-**Costs.** Extrapolation is *worse* than the elegance suggests — beyond training length, high-frequency dimensions have rotated into angular regions the model never saw, and quality collapses rather than degrading gracefully. This single failure mode generates the PI, NTK-aware and YaRN entries and arguably 31. The base frequency (usually 10000) is a hyperparameter with outsized effect that nobody tuned properly for years. It bakes in a recency bias that is right for language and wrong for some other modalities. And it interacts badly with KV compression — MLA (MLA) needs a dedicated uncompressed slice purely to accommodate it.
+**Costs.** Extrapolation is *worse* than the elegance suggests — beyond training length, high-frequency dimensions have rotated into angular regions the model never saw, and quality collapses rather than degrading gracefully. This single failure mode generates the PI, NTK-aware and YaRN entries and arguably 31. The base frequency (usually 10000) is a hyperparameter with outsized effect that nobody tuned properly for years. It bakes in a recency bias that is right for language and wrong for some other modalities. And it interacts badly with KV compression — MLA needs a dedicated uncompressed slice purely to accommodate it.
 
 **Pick when.** You need relative-position behaviour with no additional attention-time computation. This is the mechanism used by most modern decoder-only LMs.
 
-**Avoid when.** You need extrapolation with no adaptation at all — ALiBi (ALiBi) is more honest there.
+**Avoid when.** You need extrapolation with no adaptation at all — ALiBi is more honest there.
 
-**Lineage.** From sinusoidal (sinusoidal) and relative (relative positions). Into PI (PI), NTK (NTK-aware), YaRN (YaRN), MLA's carve-out (MLA), DroPE (DroPE).
+**Lineage.** From sinusoidal and relative (relative positions). Into PI, NTK (NTK-aware), YaRN, MLA's carve-out (MLA), DroPE.
 
 ---
 
@@ -321,7 +321,7 @@ Same content, condensed. Toggle at the top of the page switches between short pa
 
 **Avoid when.** Training from scratch; early layers with diffuse attention.
 
-**Lineage.** From sparse attention (Sparse Transformer). Into DSA (DSA), which is precisely this idea with a cheap learned scorer replacing the full score computation — the missing piece, four years later.
+**Lineage.** From sparse attention (Sparse Transformer). Into DSA, which is precisely this idea with a cheap learned scorer replacing the full score computation — the missing piece, four years later.
 
 ---
 
@@ -340,12 +340,12 @@ Same content, condensed. Toggle at the top of the page switches between short pa
 
 **Avoid when.** Long-range retrieval accuracy matters. Most frontier models chose RoPE plus a scaling method (21–23) over ALiBi, and that is the informative fact.
 
-**Lineage.** From T5's relative position bias, which added a *learned* bias to scores — ALiBi's move is to stop learning it. From (relative positions). Conceptual sibling of NoPE (NoPE) and DroPE (DroPE): all three argue that explicit position embeddings are the problem.
+**Lineage.** From T5's relative position bias, which added a *learned* bias to scores — ALiBi's move is to stop learning it. From (relative positions). Conceptual sibling of NoPE and DroPE: all three argue that explicit position embeddings are the problem.
 
 ---
 
 ## 16 — FlashAttention
-`2022-05-27` ○ · Tier 1 · IO diagram (bespoke) · threads: hardware
+`2022-05-27` · Tier 1 · IO diagram (bespoke) · threads: hardware
 
 > **The odd one out.** Most entries on this timeline buy efficiency by giving up accuracy. This one does not — it returns the identical result. It pays elsewhere. See the callout below.
 
@@ -383,19 +383,19 @@ Same content, condensed. Toggle at the top of the page switches between short pa
 ## 17 — Grouped-Query Attention
 `2023-05-22` · adopted `2023-07-18` ○ (Llama 2 70B) · Tier 1 · KV memory · threads: kv
 
-**Problem.** MQA (MQA) was four years old and had a known flaw — collapsing to one KV head costs quality and destabilises training. Meanwhile every existing model was MHA, and nobody wanted to retrain from scratch just to get faster inference. Two problems: the quality cliff, and the migration cost.
+**Problem.** MQA was four years old and had a known flaw — collapsing to one KV head costs quality and destabilises training. Meanwhile every existing model was MHA, and nobody wanted to retrain from scratch just to get faster inference. Two problems: the quality cliff, and the migration cost.
 
 **Mechanism.** Interpolate. Divide h query heads into g groups; each group shares one KV head. g = h is MHA, g = 1 is MQA, and everything in between is available. Second contribution, arguably the more important one: *uptraining* — convert an existing MHA checkpoint by mean-pooling its KV heads into the target group count and fine-tuning for about 5% of original pretraining compute.
 
 **Buys.** Most of MQA's speed with quality close to MHA. A tunable dial rather than a binary choice. Existing checkpoints can be converted cheaply, which lowered the barrier to adoption considerably. Trivial to implement. Training is more stable than MQA.
 
-**Costs.** Still a real quality reduction versus MHA — smaller than MQA's, not zero. Query heads within a group are constrained to the same key/value subspace, so head diversity is genuinely reduced. Group count is another hyperparameter, and the papers give little guidance beyond "8 is fine." Grouping convention is fixed at training time and silently corrupts attention if served differently. And it is a crude compression: it discards KV heads outright rather than compressing what they contain, which is exactly the gap MLA (MLA) exploits.
+**Costs.** Still a real quality reduction versus MHA — smaller than MQA's, not zero. Query heads within a group are constrained to the same key/value subspace, so head diversity is genuinely reduced. Group count is another hyperparameter, and the papers give little guidance beyond "8 is fine." Grouping convention is fixed at training time and silently corrupts attention if served differently. And it is a crude compression: it discards KV heads outright rather than compressing what they contain, which is exactly the gap MLA exploits.
 
 **Pick when.** You want most of MQA's decode speedup while keeping quality closer to MHA, or you need to convert an existing MHA checkpoint rather than retrain. It is the most common choice in current open-weight models.
 
 **Avoid when.** You are training a very large model from scratch and inference economics dominate — then MLA is worth the complexity. Or contexts are short enough that the cache was never the bottleneck.
 
-**Lineage.** From MQA (MQA). Into MLA (MLA) and every hybrid since.
+**Lineage.** From MQA. Into MLA and every hybrid since.
 
 ---
 
@@ -414,7 +414,7 @@ Same content, condensed. Toggle at the top of the page switches between short pa
 
 **Avoid when.** Encoders; precise positional tasks; production, for now.
 
-**Lineage.** From ALiBi's argument (ALiBi) that embeddings are the problem, taken to its limit. The direct conceptual setup for DroPE (DroPE) — which is the same question asked about a *trained* model rather than an untrained one.
+**Lineage.** From ALiBi's argument (ALiBi) that embeddings are the problem, taken to its limit. The direct conceptual setup for DroPE — which is the same question asked about a *trained* model rather than an untrained one.
 
 ---
 
@@ -431,9 +431,9 @@ Same content, condensed. Toggle at the top of the page switches between short pa
 
 **Pick when.** Quick context extension with a fine-tuning budget and moderate scaling factors.
 
-**Avoid when.** You cannot fine-tune, or short-context performance must be preserved. NTK (NTK-aware) and YaRN (YaRN) both exist because of this row's specific weakness.
+**Avoid when.** You cannot fine-tune, or short-context performance must be preserved. NTK (NTK-aware) and YaRN both exist because of this row's specific weakness.
 
-**Lineage.** From RoPE (RoPE). Directly provokes NTK-aware scaling (NTK-aware) two days later.
+**Lineage.** From RoPE. Directly provokes NTK-aware scaling (NTK-aware) two days later.
 
 ---
 
@@ -454,7 +454,7 @@ Same content, condensed. Toggle at the top of the page switches between short pa
 
 **Avoid when.** Large scaling factors; you want a method with a paper behind it.
 
-**Lineage.** From PI (PI), which it was written to fix. Into YaRN (YaRN), which combines both and adds the missing rigour.
+**Lineage.** From PI, which it was written to fix. Into YaRN, which combines both and adds the missing rigour.
 
 ---
 
@@ -473,12 +473,12 @@ Same content, condensed. Toggle at the top of the page switches between short pa
 
 **Avoid when.** Small extensions where PI or NTK suffices; no fine-tuning capacity; you value simplicity.
 
-**Lineage.** From PI (PI) and NTK (NTK-aware), synthesising both. The maturation and effectively the end of the RoPE-extension line — after YaRN the field stops extending position and starts changing attention itself.
+**Lineage.** From PI and NTK (NTK-aware), synthesising both. The maturation and effectively the end of the RoPE-extension line — after YaRN the field stops extending position and starts changing attention itself.
 
 ---
 
 ## 22 — Attention Sinks / StreamingLLM
-`2023-09-29` ○ · Tier 1 · heatmap · threads: sparsity, context
+`2023-09-29` · Tier 1 · heatmap · threads: sparsity, context
 
 **Problem.** For infinite streaming you want a fixed-size KV cache: keep the most recent tokens, evict the rest. Everyone had tried it. It fails immediately and bizarrely — perplexity explodes the moment the *first* few tokens are evicted, even though they are thousands of tokens in the past and obviously irrelevant to the current output.
 
@@ -492,7 +492,7 @@ Same content, condensed. Toggle at the top of the page switches between short pa
 
 **Avoid when.** Retrieval from distant context. Streaming is not long-context.
 
-**Lineage.** From sliding window (sliding window), whose failure it explains. Sinks are now standard in production long-context serving and appear inside NSA (NSA) and DSA (DSA).
+**Lineage.** From sliding window, whose failure it explains. Sinks are now standard in production long-context serving and appear inside NSA and DSA.
 
 ---
 
@@ -526,7 +526,7 @@ Same content, condensed. Toggle at the top of the page switches between short pa
 ## 24 — DeltaNet (parallelized)
 `2024-06-10` ○ · Tier 2 · recurrent state · threads: recurrent
 
-**Problem.** The delta rule (the delta rule) had been sitting unused for three years for one reason: its update is sequential. Each step reads the state the previous step wrote, so it cannot be parallelised across the sequence the way linear attention can, and on modern hardware an algorithm that cannot saturate a GPU does not get trained at scale regardless of its merits.
+**Problem.** The delta rule had been sitting unused for three years for one reason: its update is sequential. Each step reads the state the previous step wrote, so it cannot be parallelised across the sequence the way linear attention can, and on modern hardware an algorithm that cannot saturate a GPU does not get trained at scale regardless of its merits.
 
 **Mechanism.** Yang et al. reformulated the delta-rule update using the WY representation from Householder transformations, which lets a chunk of sequential rank-one updates be expressed as matrix operations over the whole chunk. Process the sequence in chunks: parallel within a chunk, sequential across chunks. Training throughput becomes competitive with linear attention while preserving the delta rule's semantics exactly.
 
@@ -538,7 +538,7 @@ Same content, condensed. Toggle at the top of the page switches between short pa
 
 **Avoid when.** Short contexts; you need maximum training throughput.
 
-**Lineage.** From the delta rule (the delta rule) and linear attention (linear attention). Into Gated DeltaNet (Gated DeltaNet) and KDA (KDA).
+**Lineage.** From the delta rule and linear attention. Into Gated DeltaNet and KDA.
 
 ---
 
@@ -557,7 +557,7 @@ Same content, condensed. Toggle at the top of the page switches between short pa
 
 **Avoid when.** You need exact retrieval over very long context, or you want mature tooling.
 
-**Lineage.** From DeltaNet (DeltaNet) and Mamba2. Into KDA (KDA) and Gated DeltaNet-2, which is where the closing section picks up.
+**Lineage.** From DeltaNet and Mamba2. Into KDA and Gated DeltaNet-2, which is where the closing section picks up.
 
 ---
 
@@ -576,7 +576,7 @@ Same content, condensed. Toggle at the top of the page switches between short pa
 
 **Avoid when.** Adapting an existing model; small teams without kernel engineers.
 
-**Lineage.** From Sparse Transformer (Sparse Transformer), sliding window (sliding window), top-k (top-k), sinks (sinks) — and philosophically from FlashAttention (FlashAttention), whose lesson about hardware alignment is the premise. Alongside DSA (DSA).
+**Lineage.** From Sparse Transformer, sliding window, top-k, sinks — and philosophically from FlashAttention, whose lesson about hardware alignment is the premise. Alongside DSA.
 
 ---
 
@@ -585,7 +585,7 @@ Same content, condensed. Toggle at the top of the page switches between short pa
 
 > Shipped in DeepSeek-V3.2-Exp. Release date used per the dating rule's artifact fallback; technical report followed.
 
-**Problem.** NSA (NSA) required training from scratch. DeepSeek wanted the same sparsity benefit on an existing V3.1 checkpoint, and wanted it to attack the KV bill as well as the compute bill. Meanwhile top-k attention (top-k) had had the right idea since 2021 with one fatal flaw: finding the top k required computing all N scores, so compute stayed quadratic.
+**Problem.** NSA required training from scratch. DeepSeek wanted the same sparsity benefit on an existing V3.1 checkpoint, and wanted it to attack the KV bill as well as the compute bill. Meanwhile top-k attention (top-k) had had the right idea since 2021 with one fatal flaw: finding the top k required computing all N scores, so compute stayed quadratic.
 
 **Mechanism.** Add a *lightning indexer* — a small, cheap scoring network that estimates the relevance of every previous token to the current query at a fraction of the cost of full attention. Take the top k by that estimate, run full attention over only those. Fine-grained token selection rather than blocks. Trained in two stages onto the existing checkpoint: first the indexer alone against the dense model's own attention distribution, then the whole model with sparsity active.
 
@@ -597,7 +597,7 @@ Same content, condensed. Toggle at the top of the page switches between short pa
 
 **Avoid when.** Short contexts; you need worst-case guarantees rather than average-case speed.
 
-**Lineage.** Top-k attention (top-k) with the missing piece supplied. Alongside NSA (NSA), attacking the same bill from the retrofit side. Built on MLA (MLA).
+**Lineage.** Top-k attention (top-k) with the missing piece supplied. Alongside NSA, attacking the same bill from the retrofit side. Built on MLA.
 
 ---
 
@@ -616,7 +616,7 @@ Same content, condensed. Toggle at the top of the page switches between short pa
 
 **Avoid when.** You need mature tooling, or exact retrieval throughout the stack.
 
-**Lineage.** From Gated DeltaNet (Gated DeltaNet). Sibling of the Qwen3-Next hybrids. Into Gated DeltaNet-2.
+**Lineage.** From Gated DeltaNet. Sibling of the Qwen3-Next hybrids. Into Gated DeltaNet-2.
 
 ---
 
@@ -625,7 +625,7 @@ Same content, condensed. Toggle at the top of the page switches between short pa
 
 **Problem.** Eight years of positional engineering — absolute, sinusoidal, relative, rotary, then four separate schemes for stretching rotary further. Every one of them is a workaround for the fact that the encoding was fixed at training time and does not fit the length you now want. Nobody had asked whether a *trained* model still needs its positional embeddings at all.
 
-**Mechanism.** Drop them. Remove RoPE after training, with adaptation, and let the causal mask carry positional information the way NoPE (NoPE) showed it can in an untrained model. What NoPE established for training from scratch, DroPE asks of an existing checkpoint.
+**Mechanism.** Drop them. Remove RoPE after training, with adaptation, and let the causal mask carry positional information the way NoPE showed it can in an untrained model. What NoPE established for training from scratch, DroPE asks of an existing checkpoint.
 
 **Buys.** Removes the positional-encoding extrapolation problem rather than extending the encoding — no out-of-distribution rotation angles, no scaling factor to choose. Sidesteps the entire PI/NTK/YaRN apparatus. Conceptually clean, and a genuinely surprising result: the thing every model has carried since 2017 turns out to be removable.
 
@@ -635,7 +635,7 @@ Same content, condensed. Toggle at the top of the page switches between short pa
 
 **Avoid when.** Production, today. This is the frontier, not the default.
 
-**Lineage.** From RoPE (RoPE), whose failure mode motivates it, and from NoPE (NoPE), whose argument it extends to trained models. The endpoint of the position thread — and the timeline's ending, because after eight years of adding machinery the most interesting recent move is subtraction.
+**Lineage.** From RoPE, whose failure mode motivates it, and from NoPE, whose argument it extends to trained models. The endpoint of the position thread — and the timeline's ending, because after eight years of adding machinery the most interesting recent move is subtraction.
 
 ---
 

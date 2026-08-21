@@ -1,6 +1,14 @@
 import re, json, sys
 
-src = open('CONTENT.md', encoding="UTF-8").read()
+_raw = open('CONTENT.md', 'rb').read()
+if _raw[:3] == b'\xef\xbb\xbf':
+    _raw = _raw[3:]                      # strip UTF-8 BOM
+try:
+    src = _raw.decode('utf-8')
+except UnicodeDecodeError:
+    src = _raw.decode('cp1252')          # editor re-saved as Windows-1252
+    print('WARNING: CONTENT.md is not UTF-8. Re-save it as UTF-8.')
+src = src.replace('\r\n', '\n').replace('\r', '\n')   # normalise CRLF
 body = src[:src.index('# Closing section')]
 blocks = re.split(r'\n(?=## )', body)
 entries = [b for b in blocks if re.match(r'## \d+ —', b)]
@@ -44,7 +52,9 @@ for b in entries:
     for key in ['Problem','Mechanism','Buys','Costs','Pick when','Avoid when','Lineage']:
         m = re.search(r'\*\*%s\.?\*\*\s*(.*?)(?=\n\*\*(?:Problem|Mechanism|Buys|Costs|Pick when|Avoid when|Lineage)|\n> \*\*|\Z)'
                       % re.escape(key), b, re.S)
-        fields[key] = m.group(1).strip() if m else ''
+        v = m.group(1).strip() if m else ''
+        v = re.sub(r'\s*\n+\s*-{3,}\s*$', '', v).strip()
+        fields[key] = v
 
     callout = None
     cm = re.search(r'> \*\*Callout[^\n]*\n((?:>.*\n?)+)', b)
@@ -64,7 +74,15 @@ for b in entries:
         pickWhen=fields['Pick when'], avoidWhen=fields['Avoid when'],
         lineage=fields['Lineage']))
 
-json.dump(out, open('src/data/registry.json','w'), indent=1, ensure_ascii=False)
+with open('src/data/registry.json','w',encoding='utf-8') as fh:
+    json.dump(out, fh, indent=1, ensure_ascii=True)
 bad = [e['id'] for e in out if not e['problem'] or not e['costs'] or not e['pickWhen']]
+hr  = [e['id'] for e in out if any(str(v).rstrip().endswith('---') for v in e.values() if isinstance(v,str))]
+dup = [e['id'] for e in out if re.search(r'([A-Za-z][\w\- ]{1,28}?)\s*\(\1\)', e['lineage'], re.I)]
+assert not hr,  'markdown rule leaked into: %s' % hr
+assert not dup, 'duplicated name deref in: %s' % dup
+_check = open('src/data/registry.json','rb').read()
+assert all(b < 128 for b in _check), 'registry.json is not pure ASCII'
+print('registry.json OK - pure ASCII, no markdown leakage, no duplicate derefs')
 print("entries:", len(out), "| incomplete:", bad or "none")
 print("unverified dates:", sum(1 for e in out if e['dateUnverified']))

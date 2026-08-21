@@ -57,7 +57,29 @@ src/styles.css          all styling, no framework
 
 ## Sources
 
-_(source table goes here — see SOURCES section below, 13 rows still pending verification)_
+**[SOURCES.md](SOURCES.md)** carries the full table: every entry, its arXiv ID, the v1 submission
+timestamp where recorded, and a per-row verification status.
+
+Dates were the part of this assignment most likely to be wrong and easiest to check, so the
+verification state is published rather than assumed:
+
+| Status | Meaning | Count |
+|---|---|---:|
+| `primary` | arXiv abstract page read directly | 18 |
+| `secondary` | two or more independent sources agree, primary page not yet read | 10 |
+| `user` | supplied by a human who opened the source directly | 1 |
+
+Anything not `primary` renders with a visible **"(unverified)"** label in the app and is counted in
+the site footer. The parser propagates this from a `○` marker in `CONTENT.md`, so a date cannot be
+presented as certain by accident.
+
+Three entries deserve mention:
+
+- **NTK-aware RoPE scaling** has no paper. It is a Reddit post that became the default
+  context-extension method in open-source models for roughly six months.
+- **Learned absolute positions** appear in Gehring et al. 1611.02344 (2016-11-07), six months
+  before the ConvS2S paper we date to. We follow the field's citation and record the discrepancy.
+- **DSA** uses the artifact-release fallback — the model shipped before the report.
 
 ## Stack
 

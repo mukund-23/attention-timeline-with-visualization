@@ -7,6 +7,24 @@ const SCHEMES = [
   { id: 'mla', name: 'MLA', entry: 'multi-head-latent-attention', year: 2024 },
 ] as const
 
+interface Preset {
+  id: string; name: string; note: string
+  layers: number; heads: number; headDim: number; groups: number; latent: number
+  native: 'mha' | 'mqa' | 'gqa' | 'mla'
+}
+
+// Figures from each model's published config. Verify against the model card before quoting.
+const PRESETS: Preset[] = [
+  { id: 'l3-8b', name: 'Llama 3 8B', note: 'GQA, 8 KV heads', native: 'gqa',
+    layers: 32, heads: 32, headDim: 128, groups: 8, latent: 512 },
+  { id: 'l3-70b', name: 'Llama 3 70B', note: 'GQA, 8 KV heads', native: 'gqa',
+    layers: 80, heads: 64, headDim: 128, groups: 8, latent: 512 },
+  { id: 'mistral-7b', name: 'Mistral 7B', note: 'GQA + sliding window', native: 'gqa',
+    layers: 32, heads: 32, headDim: 128, groups: 8, latent: 512 },
+  { id: 'dsv3', name: 'DeepSeek-V3', note: 'MLA, latent 512 + 64 rope', native: 'mla',
+    layers: 61, heads: 128, headDim: 128, groups: 8, latent: 512 },
+]
+
 const fmt = (b: number) =>
   b >= 1e12 ? `${(b / 1e12).toFixed(2)} TB`
     : b >= 1e9 ? `${(b / 1e9).toFixed(1)} GB`
@@ -22,6 +40,13 @@ export default function KVCalculator() {
   const [latent, setLatent] = useState(512)
   const [batch, setBatch] = useState(1)
   const [fp8, setFp8] = useState(false)
+  const [preset, setPreset] = useState<string | null>(null)
+
+  const apply = (p: Preset) => {
+    setLayers(p.layers); setHeads(p.heads); setHeadDim(p.headDim)
+    setGroups(p.groups); setLatent(p.latent); setPreset(p.id)
+  }
+  const cur = PRESETS.find(p => p.id === preset)
 
   const bytes = fp8 ? 1 : 2
   const seq = seqK * 1024
@@ -44,6 +69,16 @@ export default function KVCalculator() {
           re-reads for every single token it generates. Set a shape and see why four separate
           mechanisms on this timeline exist to shrink it.
         </p>
+
+        <div className="calcpresets" role="group" aria-label="Model preset">
+          <span className="threadlabel">Start from</span>
+          {PRESETS.map(p => (
+            <button key={p.id} aria-pressed={preset === p.id} onClick={() => apply(p)}>
+              <b>{p.name}</b><i>{p.note}</i>
+            </button>
+          ))}
+          {preset && <button className="threadclear" onClick={() => setPreset(null)}>custom</button>}
+        </div>
 
         <div className="calcgrid">
           <div className="calcinputs">
@@ -92,8 +127,16 @@ export default function KVCalculator() {
               and {Math.round((total('mla') / 80e9) * 100)}% under MLA — before the weights.
               That gap is the entire reason the KV thread exists.
             </p>
+            {cur && (
+              <p className="calcpresetnote">
+                <b>{cur.name}</b> ships with <b>{cur.native.toUpperCase()}</b>, so its real cache is the{' '}
+                {cur.native.toUpperCase()} row — {fmt(total(cur.native))} at this context. The other rows
+                show what the same model shape would have cost under the schemes it did not choose.
+              </p>
+            )}
             <p className="calcfine">
-              Arithmetic only: bytes = per-token KV x layers x tokens x precision x batch. Real
+              Shapes are taken from each model's published config; verify against the model card before
+              quoting them. Arithmetic only: bytes = per-token KV x layers x tokens x precision x batch. Real
               serving adds fragmentation, paging overhead and framework padding. MLA's figure assumes
               a compressed latent plus the uncompressed slice that carries position.
             </p>

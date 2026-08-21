@@ -17,11 +17,11 @@ function monthsBetween(a: string, b: string) {
   return (by - ay) * 12 + (bm - am)
 }
 
-export default function EntryCard({ e }: { e: Entry }) {
+export default function EntryCard({ e, dim = false }: { e: Entry; dim?: boolean }) {
   const era = ERAS[e.id]
   const gap = e.adopted ? monthsBetween(e.date, e.adopted) : 0
   return (
-    <article className="entry" id={e.id}>
+    <article className={`entry${dim ? ' dim' : ''}`} id={e.id}>
       <div className="rail">
         {era && <div className="eratick">{era}</div>}
         <div className="railmark">

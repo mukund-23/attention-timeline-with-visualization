@@ -136,7 +136,7 @@
   "name": "Transformer-XL / Segment-Level Recurrence",
   "date": "2019-01-09",
   "adopted": null,
-  "dateUnverified": true,
+  "dateUnverified": false,
   "tier": 2,
   "viz": "recurrent state",
   "threads": [
@@ -510,7 +510,7 @@
   "name": "FlashAttention",
   "date": "2022-05-27",
   "adopted": null,
-  "dateUnverified": true,
+  "dateUnverified": false,
   "tier": 1,
   "viz": "IO diagram (bespoke)",
   "threads": [
@@ -720,7 +720,7 @@
   "name": "Attention Sinks / StreamingLLM",
   "date": "2023-09-29",
   "adopted": null,
-  "dateUnverified": true,
+  "dateUnverified": false,
   "tier": 1,
   "viz": "heatmap",
   "threads": [

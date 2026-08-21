@@ -2,6 +2,11 @@ import { useState } from 'react'
 import registry from './data/registry.json'
 import type { Entry, Mode } from './types'
 import EntryCard from './components/EntryCard'
+import ThreadBar, { THREADS } from './components/ThreadBar'
+import KVCalculator from './components/KVCalculator'
+import RegimeConfigurator from './components/RegimeConfigurator'
+import TokenPlayground from './components/TokenPlayground'
+import VantagePoints from './components/VantagePoints'
 
 const entries = registry as Entry[]
 const SHORT = ['scaled-dot-product-attention', 'rotary-position-embeddings',
@@ -9,6 +14,9 @@ const SHORT = ['scaled-dot-product-attention', 'rotary-position-embeddings',
 
 export default function App() {
   const [mode, setMode] = useState<Mode>('full')
+  const [thread, setThread] = useState<string | null>(null)
+  const counts = Object.fromEntries(
+    THREADS.map(t => [t.id, entries.filter(e => e.threads.includes(t.id)).length]))
   const shown = mode === 'short' ? entries.filter(e => SHORT.includes(e.id)) : entries
   const pending = entries.filter(e => e.dateUnverified).length
 
@@ -52,6 +60,10 @@ export default function App() {
       </nav>
 
       {mode === 'full' && (
+        <ThreadBar active={thread} onToggle={setThread} counts={counts} />
+      )}
+
+      {mode === 'full' && (
         <section className="prologue">
           <div className="wrap">
             <h2>Before the timeline starts</h2>
@@ -75,11 +87,20 @@ export default function App() {
         </section>
       )}
 
+      <TokenPlayground />
+
       <main className="timeline" id="timeline">
         <div className="wrap">
-          {shown.map(e => <EntryCard key={e.id} e={e} />)}
+          {shown.map(e => (
+            <EntryCard key={e.id} e={e}
+              dim={thread !== null && !e.threads.includes(thread)} />
+          ))}
         </div>
       </main>
+
+      <KVCalculator />
+      <RegimeConfigurator />
+      <VantagePoints />
 
       <section className="closing">
         <div className="wrap">
